@@ -12,7 +12,6 @@ contract Insurance {
     address constant GUARD = address(1);
     
     // Customers in system
-    // address[] customers;
     mapping(address => address) _nextCustomer;
     uint256 private customerListSize;
     address constant CUSTOMERGUARD = address(1);
@@ -83,7 +82,7 @@ contract Insurance {
     
     // Remove hospital
     function removeHospital(address hospital) public {
-        require(isHospital(hospital), "Hospital is not found");
+        require(isHospital(hospital), "Hospital not found");
         address prevHospital = _getPrevHospital(hospital);
         _nextHospital[prevHospital] = _nextHospital[hospital];
         _nextHospital[hospital] = address(0);
@@ -93,9 +92,38 @@ contract Insurance {
     // **************************************************************************************
 
     // Customers
-    function isCustomer(address customer) private view returns (bool) {
+    function isCustomer(address customer) public view returns (bool) {
+        require(isHospital(msg.sender), "This function for only hospital.");
         return _nextCustomer[customer] != address(0);
     }
+    
+    function _getPrevCustomer(address customer) internal view returns (address) {
+        address currentAddress = CUSTOMERGUARD;
+        while(_nextCustomer[currentAddress] != CUSTOMERGUARD) {
+            if (_nextCustomer[currentAddress] == customer) {
+                return currentAddress;
+            }
+            currentAddress = _nextCustomer[currentAddress];
+        }
+        return address(0);
+    }
+    
+    // Add customer
+    function addCustomer(address customer) private {
+        _nextCustomer[customer] = _nextCustomer[CUSTOMERGUARD];
+        _nextCustomer[CUSTOMERGUARD] = customer;
+        customerListSize++;
+    }
+    
+    // Remove customer
+    function removeCustomer(address customer) private {
+        require(isCustomer(customer), "Customer not found");
+        address prevCustomer = _getPrevCustomer(customer);
+        _nextCustomer[prevCustomer] = _nextCustomer[customer];
+        _nextCustomer[customer] = address(0);
+        customerListSize--;
+    }
+    
     
     // buy insurance
     function buyInsurance() public payable {
@@ -105,8 +133,9 @@ contract Insurance {
         
         // return money when receive more priceOfInsturance
         uint256 moneyToReturn = msg.value - priceOfInsturance;
-        _nextCustomer[msg.sender] = _nextCustomer[CUSTOMERGUARD];
-        _nextCustomer[CUSTOMERGUARD] = msg.sender;
+        
+        // add customer in system 
+        addCustomer(msg.sender);
         
         balances[msg.sender] = balances[msg.sender];
         
@@ -114,9 +143,23 @@ contract Insurance {
             payable(msg.sender).transfer(moneyToReturn);
         }
     }
+    
+    // **************************************************************************************
 
-    // claim insurance
-    function claimInsurance() public {
-        require(!isHospital(msg.sender));
+    // Claim Insurance
+    function claimInsurance(address customer) public {
+        require(isHospital(msg.sender), "This function for only hospital.");
+        require(isCustomer(customer), "Customer not found");
+        
+        uint256 moneyToReturn = balances[customer];
+        delete balances[customer];
+        
+        // remove customer in system
+        removeCustomer(customer);
+        
+        // send money to customer
+        payable(customer).transfer(moneyToReturn);
     }
+    
+    // **************************************************************************************
 }
