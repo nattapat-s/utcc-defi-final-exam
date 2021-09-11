@@ -154,12 +154,14 @@ contract Insurance {
     
     /// @notice Buy Insurance
     function buyInsurance() public payable {
-        uint256 priceOfInsturance = 1;
-        require(msg.value >= priceOfInsturance, "Price require 1");
-        require(!isCustomer(msg.sender), "Customer already exist!");
+        require(!isHospital(msg.sender), "Hospital can't buy insurance");
+
+        uint priceOfInsturance = 10000000000000;
+        require(msg.value >= priceOfInsturance, "Price require 0.00001 ETH or more");
+        require(!isCustomer(msg.sender), "Customer already exist! or claimed insurance before.");
         
         // return money when receive more priceOfInsturance
-        uint256 moneyToReturn = msg.value - priceOfInsturance;
+        uint moneyToReturn = msg.value - priceOfInsturance;
         
         // add customer in system 
         addCustomer(msg.sender);
@@ -179,17 +181,14 @@ contract Insurance {
     /// @notice Claim Insurance
     /// @param customer address of customer
     function claimInsurance(address customer) public {
-        require(isHospital(msg.sender), "This function for only hospital.");
+        require(isHospital(msg.sender), "This function for only hospital or Hospital not found.");
         require(isCustomer(customer), "Customer not found");
         
-        uint256 moneyToReturn = 2;
-        // delete balances[customer];
-        
-        // remove customer in system
-        removeCustomer(customer);
+        uint moneyForClaim = 100000000000000;
+        require(systemBalance() >= moneyForClaim, "System balance is not enough");
         
         // send money to customer
-        payable(customer).transfer(moneyToReturn);
+        payable(customer).transfer(moneyForClaim);
         
         // Broadcast withdraw event
         emit ClaimInsuranceMade(msg.sender, customer, moneyForClaim);
