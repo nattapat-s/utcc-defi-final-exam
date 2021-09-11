@@ -17,8 +17,8 @@ contract Insurance {
     address constant CUSTOMERGUARD = address(1);
     
     // Events - publicize actions to external listeners
-    event DepositMade(address indexed accountAddress, uint amount);
-    event WithdrawMade(address indexed accountAddress, uint amount);
+    event BuyInsuranceMade(address indexed customerAddress, uint amount);
+    event ClaimInsuranceMade(address indexed hospitalAddress, address indexed customerAddress, uint amount);
     
     event SystemDepositMade(address indexed admin, uint amount);
     event SystemWithdrawMade(address indexed admin, uint amount);
@@ -159,7 +159,7 @@ contract Insurance {
         addCustomer(msg.sender);
         
         // Broadcast deposit event
-        emit DepositMade(msg.sender, msg.value); // fire event
+        emit BuyInsuranceMade(msg.sender, msg.value); // fire event
         
         if (moneyToReturn > 0) {
             payable(msg.sender).transfer(moneyToReturn);
@@ -186,7 +186,7 @@ contract Insurance {
         payable(customer).transfer(moneyToReturn);
         
         // Broadcast withdraw event
-        emit WithdrawMade(msg.sender, moneyToReturn);
+        emit ClaimInsuranceMade(msg.sender, customer, moneyForClaim);
     }
     
     // **************************************************************************************
