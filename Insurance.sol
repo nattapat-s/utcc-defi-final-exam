@@ -17,7 +17,14 @@ contract Insurance {
     address constant CUSTOMERGUARD = address(1);
     
     // dictionary that maps addresses to balances
-    mapping (address => uint256) private balances;
+    // mapping (address => uint256) private balances;
+    
+    // Events - publicize actions to external listeners
+    event DepositMade(address indexed accountAddress, uint amount);
+    event WithdrawMade(address indexed accountAddress, uint amount);
+    
+    event SystemDepositMade(address indexed admin, uint amount);
+    event SystemWithdrawMade(address indexed admin, uint amount);
 
     // Constructor, can receive one or many variables here; only one allowed
     constructor() {
@@ -29,11 +36,17 @@ contract Insurance {
     }
     
     // **************************************************************************************
+    
     // Hospital
+    
+    /// @notice Is Hospital
+    /// @param hospital address of hospital
     function isHospital(address hospital) private view returns (bool) {
         return _nextHospital[hospital] != address(0);
     }
     
+    /// @notice Get previous hospital
+    /// @param hospital address of hospital
     function _getPrevHospital(address hospital) internal view returns (address) {
         address currentAddress = GUARD;
         while(_nextHospital[currentAddress] != GUARD) {
@@ -45,10 +58,13 @@ contract Insurance {
         return address(0);
     }
     
+    /// @notice Get hospital length in hospitalListSize
     function getHospitalListCount() public view returns (uint256) {
         return hospitalListSize;
     }
     
+    /// @notice Get hospital in hospitalListSize
+    /// @param indexAt index of hospitalListSize
     function getHospital(uint256 indexAt) public view returns (address) {
         require(owner == msg.sender, "You are not authorized");
         address[] memory hospital = new address[](hospitalListSize);
@@ -60,8 +76,8 @@ contract Insurance {
         return hospital[indexAt];
     }
     
-    // Add hospital
-    // add with address
+    /// @notice Add hospital
+    /// @param hospital address of hospital
     function addHospital(address hospital) public {
         require(owner == msg.sender, "You are not authorized");
         require(!isHospital(hospital), "Hospital is exist");
@@ -70,7 +86,8 @@ contract Insurance {
         hospitalListSize++;
     }
     
-    // add with array of address
+    /// @notice Add hospital using array of hospital
+    /// @param hospitalList array of hospital address
     function addHospitalList(address[] memory hospitalList) public {
         require(owner == msg.sender, "You are not authorized");
         for (uint256 i=0; i < hospitalList.length; i++) {
@@ -80,7 +97,8 @@ contract Insurance {
         }
     }
     
-    // Remove hospital
+    /// @notice Remove hospital
+    /// @param hospital address of hospital
     function removeHospital(address hospital) public {
         require(isHospital(hospital), "Hospital not found");
         address prevHospital = _getPrevHospital(hospital);
@@ -90,13 +108,18 @@ contract Insurance {
     }
     
     // **************************************************************************************
+    
+    // Customer 
 
-    // Customers
+    /// @notice Is customer
+    /// @param customer address of customer
     function isCustomer(address customer) public view returns (bool) {
         require(isHospital(msg.sender), "This function for only hospital.");
         return _nextCustomer[customer] != address(0);
     }
     
+    /// @notice Get previous customer
+    /// @param customer address of customer
     function _getPrevCustomer(address customer) internal view returns (address) {
         address currentAddress = CUSTOMERGUARD;
         while(_nextCustomer[currentAddress] != CUSTOMERGUARD) {
@@ -108,14 +131,16 @@ contract Insurance {
         return address(0);
     }
     
-    // Add customer
+    /// @notice Add customer
+    /// @param customer address of customer
     function addCustomer(address customer) private {
         _nextCustomer[customer] = _nextCustomer[CUSTOMERGUARD];
         _nextCustomer[CUSTOMERGUARD] = customer;
         customerListSize++;
     }
     
-    // Remove customer
+    /// @notice Remove customer
+    /// @param customer address of customer
     function removeCustomer(address customer) private {
         require(isCustomer(customer), "Customer not found");
         address prevCustomer = _getPrevCustomer(customer);
@@ -124,8 +149,7 @@ contract Insurance {
         customerListSize--;
     }
     
-    
-    // buy insurance
+    /// @notice Buy Insurance
     function buyInsurance() public payable {
         uint256 priceOfInsturance = 1;
         require(msg.value >= priceOfInsturance, "Price require 1");
@@ -137,7 +161,10 @@ contract Insurance {
         // add customer in system 
         addCustomer(msg.sender);
         
-        balances[msg.sender] = balances[msg.sender];
+        // balances[msg.sender] = balances[msg.sender];
+        
+        // Broadcast deposit event
+        emit DepositMade(msg.sender, msg.value); // fire event
         
         if (moneyToReturn > 0) {
             payable(msg.sender).transfer(moneyToReturn);
@@ -147,19 +174,58 @@ contract Insurance {
     // **************************************************************************************
 
     // Claim Insurance
+    
+    /// @notice Claim Insurance
+    /// @param customer address of customer
     function claimInsurance(address customer) public {
         require(isHospital(msg.sender), "This function for only hospital.");
         require(isCustomer(customer), "Customer not found");
         
-        uint256 moneyToReturn = balances[customer];
-        delete balances[customer];
+        uint256 moneyToReturn = 2;
+        // delete balances[customer];
         
         // remove customer in system
         removeCustomer(customer);
         
         // send money to customer
         payable(customer).transfer(moneyToReturn);
+        
+        // Broadcast withdraw event
+        emit WithdrawMade(msg.sender, moneyToReturn);
     }
     
     // **************************************************************************************
+    
+    /// @notice Insurance system balance
+    /// @return Balances of all users combined
+    function systemBalance() public view returns(uint256) {
+        return address(this).balance;
+    }
+    
+    /// @notice Deposit ether into system
+    /// @return The balance of the user after the deposit is made
+    function systemDeposit() public payable returns (uint256) {
+        require(owner == msg.sender, "You are not authorized");
+
+        // Broadcast deposit event
+        emit SystemDepositMade(msg.sender, msg.value); // fire event
+
+        return systemBalance();
+    }
+    
+    /// @notice Withdraw ether from the system
+    /// @param withdrawAmount amount you want to withdraw
+    /// @return remainingBalance The balance remaining for the system
+    function systemWithdraw(uint withdrawAmount) public returns (uint256 remainingBalance) {
+        require(owner == msg.sender, "You are not authorized");
+        require(systemBalance() >= withdrawAmount, "System balance is not enough");
+
+        // Revert on failed
+        payable(msg.sender).transfer(withdrawAmount);
+        
+        // Broadcast system withdraw event
+        emit SystemWithdrawMade(msg.sender, withdrawAmount);
+        
+        return systemBalance();
+    }
 }
