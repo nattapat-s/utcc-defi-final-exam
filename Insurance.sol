@@ -10,6 +10,15 @@ contract Insurance {
     mapping(address => address) _nextHospital;
     uint256 private hospitalListSize;
     address constant GUARD = address(1);
+    
+    // Customers in system
+    // address[] customers;
+    mapping(address => address) _nextCustomer;
+    uint256 private customerListSize;
+    address constant CUSTOMERGUARD = address(1);
+    
+    // dictionary that maps addresses to balances
+    mapping (address => uint256) private balances;
 
     // Constructor, can receive one or many variables here; only one allowed
     constructor() {
@@ -17,6 +26,7 @@ contract Insurance {
         // msg.sender is contract caller (address of contract creator)
         owner = msg.sender;
         _nextHospital[GUARD] = GUARD;
+        _nextCustomer[CUSTOMERGUARD] = CUSTOMERGUARD;
     }
     
     // **************************************************************************************
@@ -82,7 +92,31 @@ contract Insurance {
     
     // **************************************************************************************
 
-    // TODO Buy insurance
+    // Customers
+    function isCustomer(address customer) private view returns (bool) {
+        return _nextCustomer[customer] != address(0);
+    }
+    
+    // buy insurance
+    function buyInsurance() public payable {
+        uint256 priceOfInsturance = 1;
+        require(msg.value >= priceOfInsturance, "Price require 1");
+        require(!isCustomer(msg.sender), "Customer already exist!");
+        
+        // return money when receive more priceOfInsturance
+        uint256 moneyToReturn = msg.value - priceOfInsturance;
+        _nextCustomer[msg.sender] = _nextCustomer[CUSTOMERGUARD];
+        _nextCustomer[CUSTOMERGUARD] = msg.sender;
+        
+        balances[msg.sender] = balances[msg.sender];
+        
+        if (moneyToReturn > 0) {
+            payable(msg.sender).transfer(moneyToReturn);
+        }
+    }
 
-    // TODO Function Claim
+    // claim insurance
+    function claimInsurance() public {
+        require(!isHospital(msg.sender));
+    }
 }
