@@ -16,9 +16,6 @@ contract Insurance {
     uint256 private customerListSize;
     address constant CUSTOMERGUARD = address(1);
     
-    // dictionary that maps addresses to balances
-    // mapping (address => uint256) private balances;
-    
     // Events - publicize actions to external listeners
     event DepositMade(address indexed accountAddress, uint amount);
     event WithdrawMade(address indexed accountAddress, uint amount);
@@ -160,8 +157,6 @@ contract Insurance {
         
         // add customer in system 
         addCustomer(msg.sender);
-        
-        // balances[msg.sender] = balances[msg.sender];
         
         // Broadcast deposit event
         emit DepositMade(msg.sender, msg.value); // fire event
