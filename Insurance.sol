@@ -114,7 +114,7 @@ contract Insurance {
     /// @notice Is customer
     /// @param customer address of customer
     function isCustomer(address customer) public view returns (bool) {
-        require(isHospital(msg.sender), "This function for only hospital.");
+        require(owner == msg.sender || isHospital(msg.sender), "This function for only admin or hospital.");
         return _nextCustomer[customer] != address(0);
     }
     
