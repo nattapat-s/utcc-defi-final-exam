@@ -77,6 +77,7 @@ contract Insurance {
     /// @param hospital address of hospital
     function addHospital(address hospital) public {
         require(owner == msg.sender, "You are not authorized");
+        require(!isCustomer(hospital), "System found this address is customer in system");
         require(!isHospital(hospital), "Hospital is exist");
         _nextHospital[hospital] = _nextHospital[GUARD];
         _nextHospital[GUARD] = hospital;
