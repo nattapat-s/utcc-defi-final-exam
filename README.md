@@ -1,1 +1,15 @@
-# utcc-defi-final-exam
+# utcc-defi-final-exam (Insurance)
+This project depoly in ***Goerli Testnet Network***
+
+Contract: [0x5280925345E4FA640836b83db8F1E9B8f5a0f90a](https://goerli.etherscan.io/address/0x5280925345e4fa640836b83db8f1e9b8f5a0f90a)
+
+## COVID-19 Insurance (ประกันโควิด 19 เจอ-จ่าย-จบ)
+### Actor
+<img src="http://yuml.me/diagram/plain/usecase/[Owner (Admin)]-(ฝากเงินเข้าระบบ), [Owner (Admin)]-(ถอนเงินจากระบบ), [Owner (Admin)]-(เพิ่มโรงพยาบาลในระบบ), [Owner (Admin)]-(ลบโรงพยาบาลในระบบ)">
+
+<img src="http://yuml.me/diagram/plain/usecase/[Customer]-(ซื้อประกัน)">
+
+<img src="http://yuml.me/diagram/plain/usecase/[Hopital]-(เคลมประกันให้กับผู้ที่ติดเชื้อโควิด)">
+
+### Special thanks
+- [Solidity 102 #2: เขียนโค้ดอย่างไรให้ใช้ Map แบบคูลๆ ❄️](https://medium.com/band-protocol-thailand/solidity-102-2-%E0%B9%80%E0%B8%82%E0%B8%B5%E0%B8%A2%E0%B8%99%E0%B9%82%E0%B8%84%E0%B9%89%E0%B8%94%E0%B8%AD%E0%B8%A2%E0%B9%88%E0%B8%B2%E0%B8%87%E0%B9%84%E0%B8%A3%E0%B9%83%E0%B8%AB%E0%B9%89%E0%B9%83%E0%B8%8A%E0%B9%89-map-%E0%B9%81%E0%B8%9A%E0%B8%9A%E0%B8%84%E0%B8%B9%E0%B8%A5%E0%B9%86-1ffbf170e44a)
