@@ -128,19 +128,6 @@ contract Insurance {
         return _nextCustomer[customer] != address(0);
     }
     
-    /// @notice Get previous customer
-    /// @param customer address of customer
-    function _getPrevCustomer(address customer) internal view returns (address) {
-        address currentAddress = CUSTOMERGUARD;
-        while(_nextCustomer[currentAddress] != CUSTOMERGUARD) {
-            if (_nextCustomer[currentAddress] == customer) {
-                return currentAddress;
-            }
-            currentAddress = _nextCustomer[currentAddress];
-        }
-        return address(0);
-    }
-    
     /// @notice Add customer
     /// @param customer address of customer
     function addCustomer(address customer) private {
@@ -149,15 +136,6 @@ contract Insurance {
         customerListSize++;
     }
     
-    /// @notice Remove customer
-    /// @param customer address of customer
-    function removeCustomer(address customer) private {
-        require(isCustomer(customer), "Customer not found");
-        address prevCustomer = _getPrevCustomer(customer);
-        _nextCustomer[prevCustomer] = _nextCustomer[customer];
-        _nextCustomer[customer] = address(0);
-        customerListSize--;
-    }
     
     /// @notice Buy Insurance
     function buyInsurance() public payable {
