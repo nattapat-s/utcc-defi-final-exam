@@ -16,6 +16,11 @@ contract Insurance {
     uint256 private customerListSize;
     address constant CUSTOMERGUARD = address(1);
     
+    // Customer claimed in system
+    mapping(address => address) _nextCustomerClaimed;
+    uint256 private customerClaimedListSize;
+    address constant CUSTOMERCLAIMEDGUARD = address(1);
+    
     // Events - publicize actions to external listeners
     event BuyInsuranceMade(address indexed customerAddress, uint amount);
     event ClaimInsuranceMade(address indexed hospitalAddress, address indexed customerAddress, uint amount);
@@ -30,6 +35,7 @@ contract Insurance {
         owner = msg.sender;
         _nextHospital[GUARD] = GUARD;
         _nextCustomer[CUSTOMERGUARD] = CUSTOMERGUARD;
+        _nextCustomerClaimed[CUSTOMERCLAIMEDGUARD] = CUSTOMERCLAIMEDGUARD;
     }
     
     // **************************************************************************************
@@ -179,14 +185,40 @@ contract Insurance {
 
     // Claim Insurance
     
+    /// @notice Is customer
+    /// @param customer address of customer
+    function isCustomerClaimed(address customer) private view returns (bool) {
+        return _nextCustomerClaimed[customer] != address(0);
+    }
+    
+    /// @notice Get customer
+    /// @param customer address of customer
+    function getCustomerClaimed(address customer) public view returns (bool) {
+        require(owner == msg.sender || isHospital(msg.sender), "This function for only admin or hospital.");
+        return _nextCustomerClaimed[customer] != address(0);
+    }
+    
+    /// @notice Add customer
+    /// @param customer address of customer
+    function addCustomerClaimed(address customer) private {
+        _nextCustomerClaimed[customer] = _nextCustomerClaimed[CUSTOMERGUARD];
+        _nextCustomerClaimed[CUSTOMERGUARD] = customer;
+        customerListSize++;
+    }
+    
     /// @notice Claim Insurance
     /// @param customer address of customer
     function claimInsurance(address customer) public {
         require(isHospital(msg.sender), "This function for only hospital or Hospital not found.");
-        require(isCustomer(customer), "Customer not found");
+        
+        require(!isCustomerClaimed(customer), "Customer already claimed insurance before.");
+        require(isCustomer(customer), "Customer not found.");
         
         uint moneyForClaim = 100000000000000;
         require(systemBalance() >= moneyForClaim, "System balance is not enough");
+        
+        // add customer claimed in system
+        addCustomerClaimed(customer);
         
         // send money to customer
         payable(customer).transfer(moneyForClaim);
