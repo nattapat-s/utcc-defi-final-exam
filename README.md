@@ -3,7 +3,7 @@
 ## Members
 
 [@nattapat-s](https://github.com/nattapat-s) | [@aommies](https://github.com/aommies) | [@Ditsayaporn](https://github.com/Ditsayaporn)
---- | --- | ---
+:---: | :---: | :---:
 Nattapat Saenharn | Khemisara Saenharn | Ditsayaporn Kittinanthanachot
 2030731303005 | 2030731303006 | 2110731303004
 ![@nattapat-s](https://avatars.githubusercontent.com/u/90109239?s=100&v=4) | ![@aommies](https://avatars.githubusercontent.com/u/90561459?s=100&v=4) | ![@Ditsayaporn](https://avatars.githubusercontent.com/u/90563514?s=100&v=4)
