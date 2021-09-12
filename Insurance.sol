@@ -69,7 +69,7 @@ contract Insurance {
     /// @notice Get hospital in hospitalListSize
     /// @param indexAt index of hospitalListSize
     function getHospital(uint256 indexAt) public view returns (address) {
-        require(owner == msg.sender, "You are not authorized");
+        require(owner == msg.sender, "You are not authorized.");
         address[] memory hospital = new address[](hospitalListSize);
         address currentAddress = _nextHospital[GUARD];
         for(uint256 i = 0; currentAddress != GUARD; ++i) {
@@ -82,9 +82,9 @@ contract Insurance {
     /// @notice Add hospital
     /// @param hospital address of hospital
     function addHospital(address hospital) public {
-        require(owner == msg.sender, "You are not authorized");
-        require(!isCustomer(hospital), "System found this address is customer in system");
-        require(!isHospital(hospital), "Hospital is exist");
+        require(owner == msg.sender, "You are not authorized.");
+        require(!isCustomer(hospital), "System found this address is customer in system.");
+        require(!isHospital(hospital), "Hospital is exist.");
         _nextHospital[hospital] = _nextHospital[GUARD];
         _nextHospital[GUARD] = hospital;
         hospitalListSize++;
@@ -93,7 +93,7 @@ contract Insurance {
     /// @notice Add hospital using array of hospital
     /// @param hospitalList array of hospital address
     function addHospitalList(address[] memory hospitalList) public {
-        require(owner == msg.sender, "You are not authorized");
+        require(owner == msg.sender, "You are not authorized.");
         for (uint256 i=0; i < hospitalList.length; i++) {
             if (!isHospital(hospitalList[i])) {
                 addHospital(hospitalList[i]);
@@ -104,7 +104,7 @@ contract Insurance {
     /// @notice Remove hospital
     /// @param hospital address of hospital
     function removeHospital(address hospital) public {
-        require(isHospital(hospital), "Hospital not found");
+        require(isHospital(hospital), "Hospital not found.");
         address prevHospital = _getPrevHospital(hospital);
         _nextHospital[prevHospital] = _nextHospital[hospital];
         _nextHospital[hospital] = address(0);
@@ -136,14 +136,15 @@ contract Insurance {
         customerListSize++;
     }
     
-    
     /// @notice Buy Insurance
     function buyInsurance() public payable {
-        require(!isHospital(msg.sender), "Hospital can't buy insurance");
+        require(!isHospital(msg.sender), "Hospital can't buy insurance.");
+        
+        require(!isCustomerClaimed(msg.sender), "Customer already claimed insurance before.");
 
         uint priceOfInsturance = 10000000000000;
-        require(msg.value >= priceOfInsturance, "Price require 0.00001 ETH or more");
-        require(!isCustomer(msg.sender), "Customer already exist! or claimed insurance before.");
+        require(msg.value >= priceOfInsturance, "Price require 0.00001 ETH or more.");
+        require(!isCustomer(msg.sender), "Customer already exist.");
         
         // return money when receive more priceOfInsturance
         uint moneyToReturn = msg.value - priceOfInsturance;
@@ -193,7 +194,7 @@ contract Insurance {
         require(isCustomer(customer), "Customer not found.");
         
         uint moneyForClaim = 100000000000000;
-        require(systemBalance() >= moneyForClaim, "System balance is not enough");
+        require(systemBalance() >= moneyForClaim, "System balance is not enough.");
         
         // add customer claimed in system
         addCustomerClaimed(customer);
@@ -216,7 +217,7 @@ contract Insurance {
     /// @notice Deposit ether into system
     /// @return The balance of the user after the deposit is made
     function systemDeposit() public payable returns (uint256) {
-        require(owner == msg.sender, "You are not authorized");
+        require(owner == msg.sender, "You are not authorized.");
 
         // Broadcast deposit event
         emit SystemDepositMade(msg.sender, msg.value); // fire event
@@ -228,8 +229,8 @@ contract Insurance {
     /// @param withdrawAmount amount you want to withdraw
     /// @return remainingBalance The balance remaining for the system
     function systemWithdraw(uint withdrawAmount) public returns (uint256 remainingBalance) {
-        require(owner == msg.sender, "You are not authorized");
-        require(systemBalance() >= withdrawAmount, "System balance is not enough");
+        require(owner == msg.sender, "You are not authorized.");
+        require(systemBalance() >= withdrawAmount, "System balance is not enough.");
 
         // Revert on failed
         payable(msg.sender).transfer(withdrawAmount);
