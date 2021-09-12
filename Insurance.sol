@@ -164,20 +164,20 @@ contract Insurance {
 
     // Claim Insurance
     
-    /// @notice Is customer
+    /// @notice Is customer claimed
     /// @param customer address of customer
     function isCustomerClaimed(address customer) private view returns (bool) {
         return _nextCustomerClaimed[customer] != address(0);
     }
     
-    /// @notice Get customer
+    /// @notice Get customer claimed
     /// @param customer address of customer
     function getCustomerClaimed(address customer) public view returns (bool) {
         require(owner == msg.sender || isHospital(msg.sender), "This function for only admin or hospital.");
         return _nextCustomerClaimed[customer] != address(0);
     }
     
-    /// @notice Add customer
+    /// @notice Add customer claimed
     /// @param customer address of customer
     function addCustomerClaimed(address customer) private {
         _nextCustomerClaimed[customer] = _nextCustomerClaimed[CUSTOMERGUARD];
