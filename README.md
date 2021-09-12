@@ -1,4 +1,11 @@
 # utcc-defi-final-exam (Insurance)
+
+Members
+[@nattapat-s](https://github.com/nattapat-s) | [@Ditsayaporn](https://github.com/Ditsayaporn) | [@aommies](https://github.com/aommies)
+--- | --- | ---
+[@nattapat-s](https://avatars.githubusercontent.com/u/90109239?s=100&v=4) | [@Ditsayaporn](https://avatars.githubusercontent.com/u/90563514?s=100&v=4) | [@aommies](https://avatars.githubusercontent.com/u/90561459?s=100&v=4)
+
+---
 This project depoly in ***Goerli Testnet Network***
 
 Contract: [0x5280925345E4FA640836b83db8F1E9B8f5a0f90a](https://goerli.etherscan.io/address/0x5280925345e4fa640836b83db8f1e9b8f5a0f90a)
