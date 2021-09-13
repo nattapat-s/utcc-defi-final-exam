@@ -1,17 +1,18 @@
 # utcc-defi-final-exam (Insurance)
 
-## Members
-
-[@nattapat-s](https://github.com/nattapat-s) | [@aommies](https://github.com/aommies) | Point | [@Ditsayaporn](https://github.com/Ditsayaporn) | Bank
-:---: | :---: | :---: | :---: | :---: 
-Nattapat Saenharn | Khemisara Saenharn | Rachuda Dontreeruk | Ditsayaporn Kittinanthanachot | Sutja Dhavehutsadin Na Ayuthaya
-2030731303005 | 2030731303006 | 2030731303007 | 2110731303004 | 2110731303006
-![@nattapat-s](https://avatars.githubusercontent.com/u/90109239?s=100&v=4) | ![@aommies](https://avatars.githubusercontent.com/u/90561459?s=100&v=4) | ![@point](https://media.nationthailand.com/uploads/images/md/2021/09/uVQBDVusfGvVxVV8W9Ry.jpg?x-image-process=style/lg) | ![@Ditsayaporn](https://avatars.githubusercontent.com/u/90563514?s=100&v=4) | Bank
-
----
 This project depoly in ***Goerli Testnet Network***
 
 Contract: [0x5280925345E4FA640836b83db8F1E9B8f5a0f90a](https://goerli.etherscan.io/address/0x5280925345e4fa640836b83db8f1e9b8f5a0f90a)
+
+## Members
+
+[@nattapat-s](https://github.com/nattapat-s) | [@aommies](https://github.com/aommies) | [@Pointtoo](https://github.com/Pointtoo) | [@Ditsayaporn](https://github.com/Ditsayaporn) | [@bank15632](https://github.com/bank15632)
+:---: | :---: | :---: | :---: | :---: 
+Nattapat Saenharn | Khemisara Saenharn | Rachuda Dontreeruk | Ditsayaporn Kittinanthanachot | Sutja Dhavehutsadin Na Ayuthaya
+2030731303005 | 2030731303006 | 2030731303007 | 2110731303004 | 2110731303006
+![@nattapat-s](https://avatars.githubusercontent.com/u/90109239?s=100&v=4) | ![@aommies](https://avatars.githubusercontent.com/u/90561459?s=100&v=4) | ![@Pointtoo](https://avatars.githubusercontent.com/u/90561792?s=100&v=4) | ![@Ditsayaporn](https://avatars.githubusercontent.com/u/90563514?s=100&v=4) | ![@bank15632](https://avatars.githubusercontent.com/u/62515222?s=100&v=4)
+
+---
 
 ## COVID-19 Insurance (ประกันโควิด 19 เจอ-จ่าย-จบ)
 ### Actor
