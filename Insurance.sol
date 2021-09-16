@@ -104,6 +104,7 @@ contract Insurance {
     /// @notice Remove hospital
     /// @param hospital address of hospital
     function removeHospital(address hospital) public {
+        require(owner == msg.sender, "You are not authorized.");
         require(isHospital(hospital), "Hospital not found.");
         address prevHospital = _getPrevHospital(hospital);
         _nextHospital[prevHospital] = _nextHospital[hospital];
