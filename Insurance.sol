@@ -139,6 +139,8 @@ contract Insurance {
     
     /// @notice Buy Insurance
     function buyInsurance() public payable {
+        require(owner != msg.sender, "Admin can't buy insurance");
+        
         require(!isHospital(msg.sender), "Hospital can't buy insurance.");
         
         require(!isCustomerClaimed(msg.sender), "Customer already claimed insurance before.");
