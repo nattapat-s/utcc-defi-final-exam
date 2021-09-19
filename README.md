@@ -2,7 +2,7 @@
 
 This project depoly in ***Goerli Testnet Network***
 
-Contract: [0xfAaCFd72F5906Bb75fC33031fAaAD6198f958aB7 ](https://goerli.etherscan.io/address/0xfaacfd72f5906bb75fc33031faaad6198f958ab7)
+Contract: [0xfAaCFd72F5906Bb75fC33031fAaAD6198f958aB7](https://goerli.etherscan.io/address/0xfaacfd72f5906bb75fc33031faaad6198f958ab7)
 
 ## Members
 
